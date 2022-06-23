@@ -58,7 +58,7 @@ optprob.cons_j(J, [5.0, 3.0])
 @test all(isapprox(J, [10.0 6.0; -0.149013 -0.958924]; rtol = 1e-3))
 H3 = [Array{Float64}(undef, 2, 2), Array{Float64}(undef, 2, 2)]
 optprob.cons_h(H3, x0)
-@test H3 == [[2.0 0.0; 0.0 2.0], [-0.0 1.0 1.0 0.0]]
+@test H3 == [[2.0 0.0; 0.0 2.0], [-0.0 1.0; 1.0 0.0]]
 
 optf = OptimizationFunction(rosenbrock, Optimization.AutoModelingToolkit(true, true),
                             cons = con2_c)
@@ -79,7 +79,7 @@ sH3 = [sparse([1, 2], [1, 2], zeros(2)), sparse([1, 1, 2], [1, 2, 1], zeros(3))]
 @test getindex.(findnz.(sH3), Ref([1, 2])) ==
       getindex.(findnz.(optprob.cons_hess_prototype), Ref([1, 2]))
 optprob.cons_h(sH3, x0)
-@test Array.(sH3) == [[2.0 0.0; 0.0 2.0], [-0.0 1.0 1.0 0.0]]
+@test Array.(sH3) == [[2.0 0.0; 0.0 2.0], [-0.0 1.0; 1.0 0.0]]
 
 optf = OptimizationFunction(rosenbrock, Optimization.AutoForwardDiff())
 optprob = Optimization.instantiate_function(optf, x0, Optimization.AutoForwardDiff(),
